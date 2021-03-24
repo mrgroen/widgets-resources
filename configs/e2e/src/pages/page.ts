@@ -7,24 +7,27 @@ class Page {
         browser.url("/" + url);
     }
 
-    getElement(selector: string): WebdriverIO.Element {
-        return $(selector);
+    getElement(selector: string, parent?: WebdriverIO.Element): WebdriverIO.Element {
+        return parent ? parent.$(selector) : $(selector);
+    }
+
+    getElements(selector: string, parent?: WebdriverIO.Element): WebdriverIO.ElementArray {
+        return parent ? parent.$$(selector) : $$(selector);
     }
 
     existing(selector: string): boolean {
         return this.getElement(selector).isExisting();
     }
 
-    waitForElement(selector: string): WebdriverIO.Element {
-        const element = this.getElement(selector);
+    waitForElement(selector: string, parent?: WebdriverIO.Element): WebdriverIO.Element {
+        const element = this.getElement(selector, parent);
         element.waitForDisplayed();
         return element;
     }
 
-    waitForElements(selector: string): WebdriverIO.Element[] {
-        this.getElement(selector).waitForDisplayed();
-        const elements = $$(selector);
-        return elements;
+    waitForElements(selector: string, parent?: WebdriverIO.Element): WebdriverIO.Element[] {
+        this.getElement(selector, parent).waitForDisplayed();
+        return this.getElements(selector, parent);
     }
 
     getWidget(widgetName: string): WebdriverIO.Element {
@@ -36,7 +39,9 @@ class Page {
     }
 
     headerElement(pageTitle = "pageTitle1"): WebdriverIO.Element {
-        return this.getWidget(pageTitle);
+        const title = this.getWidget(pageTitle);
+        title.waitForDisplayed();
+        return title;
     }
 
     header(pageTitle = "pageTitle1"): string {

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Animation renders 1`] = `
+<View
+  forwardedRef={[Function]}
+  style={Object {}}
+  testID="animation-test"
+>
+  <Text>
+    Hello
+  </Text>
+</View>
+`;

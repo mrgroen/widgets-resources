@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "baseline",
+      "backgroundColor": "#ccc",
+      "borderRadius": 30,
+      "justifyContent": "center",
+      "paddingHorizontal": 10,
+      "paddingVertical": 5,
+    }
+  }
+  testID="badge-test"
+>
+  <Text
+    style={
+      Object {
+        "color": "#444",
+        "fontSize": 14,
+        "fontWeight": "bold",
+      }
+    }
+    testID="badge-test$caption"
+  >
+    Caption
+  </Text>
+</View>
+`;
+
+exports[`Badge renders with custom styles 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "baseline",
+      "backgroundColor": "green",
+      "borderColor": "green",
+      "borderRadius": 30,
+      "justifyContent": "center",
+      "paddingHorizontal": 10,
+      "paddingVertical": 5,
+    }
+  }
+  testID="badge-test"
+>
+  <Text
+    style={
+      Object {
+        "color": "green",
+        "fontSize": 14,
+        "fontWeight": "bold",
+      }
+    }
+    testID="badge-test$caption"
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Badge renders with default styles 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "baseline",
+      "backgroundColor": "#ccc",
+      "borderRadius": 30,
+      "justifyContent": "center",
+      "paddingHorizontal": 10,
+      "paddingVertical": 5,
+    }
+  }
+  testID="badge-test"
+>
+  <Text
+    style={
+      Object {
+        "color": "#444",
+        "fontSize": 14,
+        "fontWeight": "bold",
+      }
+    }
+    testID="badge-test$caption"
+  >
+    
+  </Text>
+</View>
+`;
+
+exports[`Badge with on click action Android renders touchables 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "baseline",
+      "backgroundColor": "#ccc",
+      "borderRadius": 30,
+      "justifyContent": "center",
+      "paddingHorizontal": 10,
+      "paddingVertical": 5,
+    }
+  }
+  testID="badge-test"
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onFocus={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+  >
+    <Text
+      style={
+        Object {
+          "color": "#444",
+          "fontSize": 14,
+          "fontWeight": "bold",
+        }
+      }
+      testID="badge-test$caption"
+    >
+      
+    </Text>
+  </View>
+</View>
+`;
+
+exports[`Badge with on click action iOS renders touchables 1`] = `
+<View
+  style={
+    Object {
+      "alignSelf": "baseline",
+      "backgroundColor": "#ccc",
+      "borderRadius": 30,
+      "justifyContent": "center",
+      "paddingHorizontal": 10,
+      "paddingVertical": 5,
+    }
+  }
+  testID="badge-test"
+>
+  <View
+    accessible={true}
+    focusable={true}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onFocus={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+  >
+    <Text
+      style={
+        Object {
+          "color": "#444",
+          "fontSize": 14,
+          "fontWeight": "bold",
+        }
+      }
+      testID="badge-test$caption"
+    >
+      
+    </Text>
+  </View>
+</View>
+`;

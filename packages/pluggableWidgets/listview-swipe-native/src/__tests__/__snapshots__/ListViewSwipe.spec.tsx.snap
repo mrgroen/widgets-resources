@@ -1,0 +1,232 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`List View Swipe render with archive animation 1`] = `
+<View
+  style={Object {}}
+>
+  <View
+    friction={1}
+    leftThreshold={64}
+    onSwipeableLeftOpen={[Function]}
+    onSwipeableRightOpen={[Function]}
+    overshootLeft={false}
+    overshootRight={false}
+    renderLeftActions={[Function]}
+    renderRightActions={[Function]}
+    rightThreshold={64}
+    useNativeAnimations={true}
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Object {
+          "alignItems": "stretch",
+          "backgroundColor": "white",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "space-between",
+        }
+      }
+      testID="list-view-swipe-test"
+    />
+  </View>
+</View>
+`;
+
+exports[`List View Swipe render with buttons option 1`] = `
+<View
+  style={Object {}}
+>
+  <View
+    friction={1}
+    leftThreshold={64}
+    onSwipeableLeftOpen={[Function]}
+    onSwipeableRightOpen={[Function]}
+    overshootLeft={false}
+    overshootRight={false}
+    renderLeftActions={[Function]}
+    renderRightActions={[Function]}
+    rightThreshold={64}
+    useNativeAnimations={true}
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Object {
+          "alignItems": "stretch",
+          "backgroundColor": "white",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "space-between",
+        }
+      }
+      testID="list-view-swipe-test"
+    />
+  </View>
+</View>
+`;
+
+exports[`List View Swipe render with left and action 1`] = `
+<View
+  style={Object {}}
+>
+  <View
+    friction={1}
+    leftThreshold={64}
+    onSwipeableLeftOpen={[Function]}
+    onSwipeableRightOpen={[Function]}
+    overshootLeft={false}
+    overshootRight={false}
+    renderLeftActions={[Function]}
+    renderRightActions={[Function]}
+    rightThreshold={64}
+    useNativeAnimations={true}
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Object {
+          "alignItems": "stretch",
+          "backgroundColor": "white",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "space-between",
+        }
+      }
+      testID="list-view-swipe-test"
+    />
+  </View>
+</View>
+`;
+
+exports[`List View Swipe render with left and right with actions 1`] = `
+<View
+  style={Object {}}
+>
+  <View
+    friction={1}
+    leftThreshold={64}
+    onSwipeableLeftOpen={[Function]}
+    onSwipeableRightOpen={[Function]}
+    overshootLeft={false}
+    overshootRight={false}
+    renderLeftActions={[Function]}
+    renderRightActions={[Function]}
+    rightThreshold={64}
+    useNativeAnimations={true}
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Object {
+          "alignItems": "stretch",
+          "backgroundColor": "white",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "space-between",
+        }
+      }
+      testID="list-view-swipe-test"
+    />
+  </View>
+</View>
+`;
+
+exports[`List View Swipe render with right and action 1`] = `
+<View
+  style={Object {}}
+>
+  <View
+    friction={1}
+    leftThreshold={64}
+    onSwipeableLeftOpen={[Function]}
+    onSwipeableRightOpen={[Function]}
+    overshootLeft={false}
+    overshootRight={false}
+    renderLeftActions={[Function]}
+    renderRightActions={[Function]}
+    rightThreshold={64}
+    useNativeAnimations={true}
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Object {
+          "alignItems": "stretch",
+          "backgroundColor": "white",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "space-between",
+        }
+      }
+      testID="list-view-swipe-test"
+    />
+  </View>
+</View>
+`;
+
+exports[`List View Swipe render with toggle animation 1`] = `
+<View
+  style={Object {}}
+>
+  <View
+    friction={1}
+    leftThreshold={64}
+    onSwipeableLeftOpen={[Function]}
+    onSwipeableRightOpen={[Function]}
+    overshootLeft={false}
+    overshootRight={false}
+    renderLeftActions={[Function]}
+    renderRightActions={[Function]}
+    rightThreshold={64}
+    useNativeAnimations={true}
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Object {
+          "alignItems": "stretch",
+          "backgroundColor": "white",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "space-between",
+        }
+      }
+      testID="list-view-swipe-test"
+    />
+  </View>
+</View>
+`;
+
+exports[`List View Swipe renders 1`] = `
+<View
+  style={Object {}}
+>
+  <View
+    friction={1}
+    leftThreshold={64}
+    onSwipeableLeftOpen={[Function]}
+    onSwipeableRightOpen={[Function]}
+    overshootLeft={false}
+    overshootRight={false}
+    renderLeftActions={[Function]}
+    renderRightActions={[Function]}
+    rightThreshold={64}
+    useNativeAnimations={true}
+  >
+    <View
+      onLayout={[Function]}
+      style={
+        Object {
+          "alignItems": "stretch",
+          "backgroundColor": "white",
+          "flex": 1,
+          "flexDirection": "column",
+          "justifyContent": "space-between",
+        }
+      }
+      testID="list-view-swipe-test"
+    />
+  </View>
+</View>
+`;
