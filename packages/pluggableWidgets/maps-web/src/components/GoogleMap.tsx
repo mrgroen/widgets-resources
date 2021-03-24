@@ -2,10 +2,12 @@ import { createElement, Dispatch, ReactElement, SetStateAction, useEffect, useRe
 import classNames from "classnames";
 import {
     GoogleMap as GoogleMapComponent,
+    MarkerClusterer,
     Marker as MarkerComponent,
     InfoWindow,
     LoadScript
 } from "@react-google-maps/api";
+import { MarkerExtended, ClusterIconInfo } from "@react-google-maps/marker-clusterer";
 import { Marker, SharedProps } from "../../typings/shared";
 import { getGoogleMapsStyles } from "../utils/google";
 import { getDimensions } from "../utils/dimension";
@@ -105,17 +107,31 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                         zoom={autoZoom ? translateZoom("city") : zoomLevel}
                         center={center.current}
                     >
-                        {locations
-                            .concat(currentLocation ? [currentLocation] : [])
-                            .filter(m => !!m)
-                            .map((marker, index) => (
-                                <GoogleMapsMarker
-                                    key={`marker_${index}`}
-                                    marker={marker}
-                                    selectedMarker={selectedMarker}
-                                    setSelectedMarker={setSelectedMarker}
-                                />
-                            ))}
+                        <MarkerClusterer
+                            options={{
+                                gridSize: 10,
+                                minimumClusterSize: 2,
+                                averageCenter: true,
+                                enableRetinaIcons: true,
+                                zoomOnClick: true
+                            }}
+                            calculator={setCalculator}
+                        >
+                            {clusterer =>
+                                locations
+                                    .concat(currentLocation ? [currentLocation] : [])
+                                    .filter(m => !!m)
+                                    .map((marker, index) => (
+                                        <GoogleMapsMarker
+                                            key={`marker_${index}`}
+                                            marker={marker}
+                                            selectedMarker={selectedMarker}
+                                            setSelectedMarker={setSelectedMarker}
+                                            clusterer={clusterer}
+                                        />
+                                    ))
+                            }
+                        </MarkerClusterer>
                     </GoogleMapComponent>
                 </LoadScript>
             </div>
@@ -123,18 +139,61 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
     );
 }
 
+/**
+ * Set our own custom marker cluster calculator.
+ * It's important to remember that this function runs for EACH cluster individually.
+ * @param {Array} markers Set of markers for this cluster.
+ * @param {Number} num Number of styles we have to play with (set in mcOptions).
+ */
+function setCalculator(markers: MarkerExtended[], num: number): ClusterIconInfo {
+    let index: number = 0;
+    let count: number = markers.length;
+    let dv: number = count;
+
+    /**
+     * While we still have markers, divide by a set number and
+     * increase the index. Cluster moves up to a new style.
+     *
+     * The bigger the index, the more markers the cluster contains,
+     * so the bigger the cluster.
+     */
+    while (dv !== 0) {
+        dv = parseInt((dv / 5).toString(), 10);
+        index++;
+    }
+
+    /**
+     * Make sure we always return a valid index. E.g. If we only have
+     * 5 styles, but the index is 8, this will make sure we return
+     * 5. Returning an index of 8 wouldn't have a marker style.
+     */
+    index = Math.min(index, num);
+
+    /**
+     * Return ClusterIconInfo
+     */
+    return {
+        text: count.toString(),
+        index: index,
+        title: ""
+    };
+}
+
 function GoogleMapsMarker({
     marker,
     selectedMarker,
-    setSelectedMarker
+    setSelectedMarker,
+    clusterer
 }: {
     marker: Marker;
     selectedMarker: Option<Marker>;
     setSelectedMarker: Dispatch<SetStateAction<Option<Marker>>>;
+    clusterer: any;
 }): ReactElement {
     const markerRef = useRef<google.maps.MVCObject>();
     return (
         <MarkerComponent
+            clusterer={clusterer}
             position={{
                 lat: marker.latitude,
                 lng: marker.longitude
