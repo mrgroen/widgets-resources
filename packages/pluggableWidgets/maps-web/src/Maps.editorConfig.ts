@@ -34,6 +34,8 @@ export function getProperties(
         hidePropertiesIn(defaultProperties, values, [
             "mapProvider",
             "mapStyles",
+            "markerClustererEnabled",
+            "markerClustererOptions",
             "geodecodeApiKeyExp",
             "geodecodeApiKey"
         ]);
@@ -75,13 +77,19 @@ export function getProperties(
             "mapTypeControl",
             "fullScreenControl",
             "rotateControl",
-            "mapStyles"
+            "mapStyles",
+            "markerClustererEnabled",
+            "markerClustererOptions"
         ]);
         if (values.mapProvider === "openStreet") {
             hidePropertiesIn(defaultProperties, values, ["apiKeyExp", "apiKey"]);
         }
     } else {
         hidePropertyIn(defaultProperties, values, "attributionControl");
+    }
+
+    if (values.mapProvider === "googleMaps" && !values.markerClustererEnabled) {
+        hidePropertiesIn(defaultProperties, values, ["markerClustererOptions"]);
     }
 
     return defaultProperties;

@@ -7,9 +7,8 @@ import {
     InfoWindow,
     LoadScript
 } from "@react-google-maps/api";
-import { MarkerExtended, ClusterIconInfo } from "@react-google-maps/marker-clusterer";
 import { Marker, SharedProps } from "../../typings/shared";
-import { getGoogleMapsStyles } from "../utils/google";
+import { getGoogleMapsMarkerClustererOptions, getGoogleMapsStyles } from "../utils/google";
 import { getDimensions } from "../utils/dimension";
 import { translateZoom } from "../utils/zoom";
 import { Option } from "../utils/data";
@@ -21,6 +20,7 @@ export interface GoogleMapsProps extends SharedProps {
     mapTypeControl: boolean;
     fullscreenControl: boolean;
     rotateControl: boolean;
+    markerClustererOptions?: string;
 }
 
 export function GoogleMap(props: GoogleMapsProps): ReactElement {
@@ -46,7 +46,8 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
         rotateControl,
         streetViewControl,
         style,
-        zoomLevel
+        zoomLevel,
+        markerClustererOptions
     } = props;
 
     useEffect(() => {
@@ -107,15 +108,8 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                         zoom={autoZoom ? translateZoom("city") : zoomLevel}
                         center={center.current}
                     >
-                        <MarkerClusterer
-                            options={{
-                                gridSize: 10,
-                                minimumClusterSize: 2,
-                                averageCenter: true,
-                                enableRetinaIcons: true,
-                                zoomOnClick: true
-                            }}
-                            calculator={setCalculator}
+                        <MarkerClusterer /* https://react-google-maps-api-docs.netlify.app/#markerclusterer */
+                            options={getGoogleMapsMarkerClustererOptions(markerClustererOptions)}
                         >
                             {clusterer =>
                                 locations
@@ -137,46 +131,6 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
             </div>
         </div>
     );
-}
-
-/**
- * Set our own custom marker cluster calculator.
- * It's important to remember that this function runs for EACH cluster individually.
- * @param {Array} markers Set of markers for this cluster.
- * @param {Number} num Number of styles we have to play with (set in mcOptions).
- */
-function setCalculator(markers: MarkerExtended[], num: number): ClusterIconInfo {
-    let index: number = 0;
-    let count: number = markers.length;
-    let dv: number = count;
-
-    /**
-     * While we still have markers, divide by a set number and
-     * increase the index. Cluster moves up to a new style.
-     *
-     * The bigger the index, the more markers the cluster contains,
-     * so the bigger the cluster.
-     */
-    while (dv !== 0) {
-        dv = parseInt((dv / 5).toString(), 10);
-        index++;
-    }
-
-    /**
-     * Make sure we always return a valid index. E.g. If we only have
-     * 5 styles, but the index is 8, this will make sure we return
-     * 5. Returning an index of 8 wouldn't have a marker style.
-     */
-    index = Math.min(index, num);
-
-    /**
-     * Return ClusterIconInfo
-     */
-    return {
-        text: count.toString(),
-        index: index,
-        title: ""
-    };
 }
 
 function GoogleMapsMarker({

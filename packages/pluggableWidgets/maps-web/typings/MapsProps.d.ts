@@ -96,6 +96,8 @@ export interface MapsContainerProps {
     zoom: ZoomEnum;
     mapProvider: MapProviderEnum;
     mapStyles: string;
+    markerClustererEnabled: boolean;
+    markerClustererOptions: string;
 }
 
 export interface MapsPreviewProps {
@@ -124,4 +126,6 @@ export interface MapsPreviewProps {
     zoom: ZoomEnum;
     mapProvider: MapProviderEnum;
     mapStyles: string;
+    markerClustererEnabled: boolean;
+    markerClustererOptions: string;
 }

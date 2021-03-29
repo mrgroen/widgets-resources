@@ -260,6 +260,14 @@
                     <caption>Map styles</caption>
                     <description>JSON array with Google Maps styles.</description>
                 </property>
+                <property key="markerClustererEnabled" type="boolean" defaultValue="false">
+                    <caption>MarkerClusterer</caption>
+                    <description>Enables marker clustering.</description>
+                </property>
+                <property key="markerClustererOptions" type="string" multiline="true" required="false">
+                    <caption>MarkerClusterer options</caption>
+                    <description>JSON object with clusterer options. https://react-google-maps-api-docs.netlify.app/#markerclusterer</description>
+                </property>
             </propertyGroup>
         </propertyGroup>
     </properties>
