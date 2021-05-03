@@ -5,14 +5,14 @@ import {
     MarkerClusterer,
     Marker as MarkerComponent,
     InfoWindow,
-    LoadScript
+    useLoadScript
 } from "@react-google-maps/api";
 import { Marker, SharedProps } from "../../typings/shared";
 import { getGoogleMapsMarkerClustererOptions, getGoogleMapsStyles } from "../utils/google";
 import { getDimensions } from "../utils/dimension";
 import { translateZoom } from "../utils/zoom";
 import { Option } from "../utils/data";
-import { Alert } from "@widgets-resources/piw-utils";
+import { Alert } from "@mendix/piw-utils-internal";
 
 export interface GoogleMapsProps extends SharedProps {
     mapStyles?: string;
@@ -73,16 +73,20 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
         }
     }, [map.current, locations, currentLocation, autoZoom]);
 
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: mapsToken ?? "",
+        id: "_com.mendix.widget.custom.Maps.Maps"
+    });
+
+    if (loadError) {
+        setError(loadError.message);
+    }
+
     return (
         <div className={classNames("widget-maps", className)} style={{ ...style, ...getDimensions(props) }}>
             {error && <Alert bootstrapStyle="danger">{error}</Alert>}
             <div className="widget-google-maps-wrapper">
-                <LoadScript
-                    googleMapsApiKey={mapsToken ?? ""}
-                    id="_com.mendix.widget.custom.Maps.Maps"
-                    loadingElement={<div className="spinner" />}
-                    onError={error => setError(error.message)}
-                >
+                {isLoaded ? (
                     <GoogleMapComponent
                         mapContainerClassName="widget-google-maps"
                         options={{
@@ -127,7 +131,9 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                             }
                         </MarkerClusterer>
                     </GoogleMapComponent>
-                </LoadScript>
+                ) : (
+                    <div className="spinner" />
+                )}
             </div>
         </div>
     );

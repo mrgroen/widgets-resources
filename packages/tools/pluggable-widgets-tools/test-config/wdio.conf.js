@@ -22,7 +22,7 @@ exports.config = {
     host: serverIp,
     port: serverPort,
     specs: [join(process.cwd(), "./tests/e2e/**/*.spec.js"), join(process.cwd(), "./tests/e2e/**/*.spec.ts")],
-    maxInstances: 5,
+    maxInstances: 1,
     capabilities: [
         {
             browserName,
@@ -32,7 +32,7 @@ exports.config = {
         }
     ],
     sync: true,
-    logLevel: "silent",
+    logLevel: "error",
     coloredLogs: true,
     bail: 0,
     screenshotPath: resultsPath,
@@ -68,7 +68,7 @@ exports.config = {
         // take a screenshot anytime a test fails
         if (error) {
             const timestamp = new Date().toJSON().replace(/:/g, "-");
-            const testName = test.fullName.replace(/ /g, "_");
+            const testName = test.id;
             const filePath = join(resultsPath, `TESTFAIL_${browserName}_${testName}_${timestamp}.png`);
             browser.saveScreenshot(filePath);
             console.log("Saved screenshot: ", filePath);

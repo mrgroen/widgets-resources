@@ -1,7 +1,7 @@
 {
   "name": "accessibility-helper-web",
   "widgetName": "AccessibilityHelper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Set an attribute to a DOM element",
   "copyright": "Mendix 2020",
   "author": "Widget Team",
@@ -17,12 +17,13 @@
     "format": "pluggable-widgets-tools format",
     "lint": "..\"/../../node_modules/.bin/eslint\" --config ../../../.eslintrc.js --ext .jsx,.js,.ts,.tsx src/",
     "pretest:e2e": "node ../../../scripts/test/updateAtlas.js",
+    "test:e2e": "pluggable-widgets-tools test:e2e:web",
     "test:e2e:dev": "pluggable-widgets-tools test:e2e:web:dev",
     "release": "pluggable-widgets-tools release:web"
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@widgets-resources/piw-utils": "^1.0.0"
+    "@mendix/piw-utils-internal": "^1.0.0"
   },
   "devDependencies": {
     "@mendix/pluggable-widgets-tools": ">=8.9.2"
