@@ -1,7 +1,7 @@
 {
   "name": "maps-web",
   "widgetName": "Maps",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Show locations on Maps",
   "copyright": "Mendix Technology B.V.",
   "license": "Apache-2.0",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@react-google-maps/api": "^1.8.6",
-    "@widgets-resources/piw-utils": "^1.0.0",
+    "@mendix/piw-utils-internal": "^1.0.0",
     "classnames": "^2.2.6",
     "deep-equal": "^2.0.2",
     "leaflet": "^1.6.0",

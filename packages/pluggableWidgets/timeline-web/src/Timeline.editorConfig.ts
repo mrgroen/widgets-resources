@@ -4,7 +4,7 @@ import {
     Problem,
     Properties,
     StructurePreviewProps
-} from "@widgets-resources/piw-utils";
+} from "@mendix/piw-utils-internal";
 import { TimelinePreviewProps } from "../typings/TimelineProps";
 import lineAndDotSVG from "./assets/lineAndDot.svg";
 import { getHeaderOption, GroupHeaderConfig } from "./utils/utils";
@@ -75,7 +75,11 @@ export function check(values: TimelinePreviewProps): Problem[] {
     return errors;
 }
 
-export function getPreview(values: TimelinePreviewProps): StructurePreviewProps {
+export function getPreview(values: TimelinePreviewProps): StructurePreviewProps | null {
+    if (values.customVisualization) {
+        return null;
+    }
+
     return {
         type: "Container",
         children: [

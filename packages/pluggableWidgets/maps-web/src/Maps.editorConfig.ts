@@ -1,5 +1,16 @@
-import { hidePropertiesIn, hidePropertyIn, Problem, Properties } from "@widgets-resources/piw-utils";
+import {
+    hidePropertiesIn,
+    hidePropertyIn,
+    Problem,
+    Properties,
+    StructurePreviewProps
+} from "@mendix/piw-utils-internal";
 import { MapsPreviewProps } from "../typings/MapsProps";
+
+import GoogleMapsSVG from "./assets/GoogleMaps.svg";
+import MapboxSVG from "./assets/Mapbox.svg";
+import OpenStreetMapSVG from "./assets/OpenStreetMap.svg";
+import HereMapsSVG from "./assets/HereMaps.svg";
 
 export function getProperties(
     values: MapsPreviewProps,
@@ -105,71 +116,100 @@ export function check(values: MapsPreviewProps): Problem[] {
         });
     }
 
-    values.markers.forEach(marker => {
+    values.markers.forEach((marker, index) => {
         if (marker.locationType === "address") {
             if (!marker.address) {
                 errors.push({
-                    property: "markers.address",
+                    property: `markers/${index + 1}/address`,
                     message: "A static marker requires an address"
                 });
             }
         } else {
             if (!marker.latitude) {
                 errors.push({
-                    property: "markers.latitude",
+                    property: `markers/${index + 1}/latitude`,
                     message: "A static marker requires latitude"
                 });
             }
             if (!marker.longitude) {
                 errors.push({
-                    property: "markers.longitude",
+                    property: `markers/${index + 1}/longitude`,
                     message: "A static marker requires longitude"
                 });
             }
         }
         if (values.advanced && marker.markerStyle === "image" && !marker.customMarker) {
             errors.push({
-                property: "customMarker",
+                property: `markers/${index + 1}/customMarker`,
                 message: `Custom marker image is required when shape is 'image' for address ${marker.address}`
             });
         }
     });
 
     values.dynamicMarkers.forEach((marker, index) => {
-        if (!marker.markersDS) {
+        // @ts-ignore
+        if (marker.markersDS.type === "null") {
             errors.push({
-                property: "dynamicMarkers.markersDS",
+                property: `dynamicMarkers/${index + 1}/markersDS`,
                 message: "A data source should be selected in order to retrieve a list of markers"
             });
-        }
-        if (marker.locationType === "address") {
-            if (!marker.address) {
-                errors.push({
-                    property: "dynamicMarkers.address",
-                    message: "A dynamic marker requires an address"
-                });
-            }
         } else {
-            if (!marker.latitude) {
-                errors.push({
-                    property: "dynamicMarkers.latitude",
-                    message: "A dynamic marker requires latitude"
-                });
-            }
-            if (!marker.longitude) {
-                errors.push({
-                    property: "dynamicMarkers.longitude",
-                    message: "A dynamic marker requires longitude"
-                });
+            if (marker.locationType === "address") {
+                if (!marker.address) {
+                    errors.push({
+                        property: `dynamicMarkers/${index + 1}/address`,
+                        message: "A dynamic marker requires an address"
+                    });
+                }
+            } else {
+                if (!marker.latitude) {
+                    errors.push({
+                        property: `dynamicMarkers/${index + 1}/latitude`,
+                        message: "A dynamic marker requires latitude"
+                    });
+                }
+                if (!marker.longitude) {
+                    errors.push({
+                        property: `dynamicMarkers/${index + 1}/longitude`,
+                        message: "A dynamic marker requires longitude"
+                    });
+                }
             }
         }
         if (values.advanced && marker.markerStyleDynamic === "image" && !marker.customMarkerDynamic) {
             errors.push({
-                property: "dynamicMarkers.customMarkerDynamic",
+                property: `dynamicMarkers/${index + 1}/customMarkerDynamic`,
                 message: `Custom marker image is required when shape is 'image' for list at position ${index + 1}`
             });
         }
     });
 
     return errors;
+}
+
+export function getPreview(values: MapsPreviewProps): StructurePreviewProps {
+    const { mapProvider } = values;
+    let image: string;
+
+    switch (mapProvider) {
+        case "googleMaps":
+            image = GoogleMapsSVG;
+            break;
+        case "mapBox":
+            image = MapboxSVG;
+            break;
+        case "openStreet":
+            image = OpenStreetMapSVG;
+            break;
+        case "hereMaps":
+            image = HereMapsSVG;
+            break;
+    }
+
+    return {
+        type: "Image",
+        document: decodeURIComponent(image.replace("data:image/svg+xml,", "")),
+        width: 375,
+        height: 375
+    };
 }

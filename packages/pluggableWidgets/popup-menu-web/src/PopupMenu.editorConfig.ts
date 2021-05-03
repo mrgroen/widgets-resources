@@ -1,4 +1,15 @@
-import { changePropertyIn, hidePropertyIn, Problem, Properties } from "@widgets-resources/piw-utils";
+import {
+    changePropertyIn,
+    ContainerProps,
+    DropZoneProps,
+    hidePropertyIn,
+    Problem,
+    Properties,
+    RowLayoutProps,
+    SelectableProps,
+    StructurePreviewProps,
+    TextProps
+} from "@mendix/piw-utils-internal";
 import { BasicItemsPreviewType, PopupMenuPreviewProps } from "../typings/PopupMenuProps";
 
 export function getProperties(
@@ -72,10 +83,10 @@ export function check(values: PopupMenuPreviewProps): Problem[] {
                 message: "For the popup menu to be visible, you need to add at least one item to it."
             });
         }
-        values.basicItems.forEach(item => {
+        values.basicItems.forEach((item, index) => {
             if (item.itemType === "item" && !item.caption) {
                 errors.push({
-                    property: "basicItems.caption",
+                    property: `basicItems/${index + 1}/caption`,
                     message: "The 'Caption' property is required."
                 });
             }
@@ -87,14 +98,79 @@ export function check(values: PopupMenuPreviewProps): Problem[] {
                 message: "For the popup menu to be visible, you need to add at least one item to it."
             });
         }
-        values.customItems.forEach(item => {
-            if (!item.content) {
-                errors.push({
-                    property: "customItems.content",
-                    message: "The content of a menu item cannot be empty."
-                });
-            }
-        });
     }
     return errors;
+}
+
+export function getPreview(values: PopupMenuPreviewProps): StructurePreviewProps | null {
+    if (values.advancedMode) {
+        return null;
+    }
+
+    return {
+        type: "Container",
+        children: [
+            {
+                type: "Container",
+                backgroundColor: values.menuTrigger.widgetCount === 0 ? "#F5F5F5" : undefined,
+                children: [
+                    {
+                        type: "DropZone",
+                        property: values.menuTrigger,
+                        placeholder: "Place menu trigger widget here"
+                    } as DropZoneProps
+                ]
+            } as ContainerProps,
+            {
+                type: "Container",
+                padding: 1,
+                children: []
+            } as ContainerProps,
+            {
+                type: "RowLayout",
+                columnSize: "grow",
+                children: [
+                    {
+                        type: "Container",
+                        borders: true,
+                        borderRadius: 8,
+                        grow: 0,
+                        children: [...buildMenuItems(values)]
+                    } as ContainerProps,
+                    {
+                        // To create some space on the right so the menu items don't take full width.
+                        type: "Container",
+                        children: []
+                    } as ContainerProps
+                ]
+            } as RowLayoutProps
+        ]
+    } as ContainerProps;
+
+    function buildMenuItems(values: PopupMenuPreviewProps): StructurePreviewProps[] {
+        return values.basicItems.map(
+            item =>
+                ({
+                    type: "Container",
+                    backgroundColor: item.itemType === "divider" ? "#ced0d3" : "#fff",
+                    children: [
+                        {
+                            type: "Selectable",
+                            object: item,
+                            child: {
+                                type: "Container",
+                                padding: item.itemType === "divider" ? 1 : 12,
+                                children: [
+                                    {
+                                        type: "Text",
+                                        fontColor: "#555555",
+                                        content: item.caption
+                                    } as TextProps
+                                ]
+                            } as ContainerProps
+                        } as SelectableProps
+                    ]
+                } as ContainerProps)
+        );
+    }
 }
