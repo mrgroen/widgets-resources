@@ -42,7 +42,7 @@ export type WidthUnitEnum = "percentage" | "pixels";
 
 export type HeightUnitEnum = "percentageOfWidth" | "pixels" | "percentageOfParent";
 
-export type ZoomEnum = "automatic" | "world" | "continent" | "city" | "street" | "buildings";
+export type ZoomEnum = "automatic" | "world" | "continent" | "zoomlevel6" | "zoomlevel7" | "zoomlevel8" | "zoomlevel9" | "city" | "street" | "buildings";
 
 export type MapProviderEnum = "googleMaps" | "openStreet" | "mapBox" | "hereMaps";
 

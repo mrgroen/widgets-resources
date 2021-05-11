@@ -52,6 +52,7 @@ export default function Maps(props: MapsContainerProps): ReactNode {
             width={props.width}
             widthUnit={props.widthUnit}
             zoomLevel={translateZoom(props.zoom)}
+            markerClustererEnabled={props.markerClustererEnabled}
             markerClustererOptions={props.markerClustererOptions}
         />
     );

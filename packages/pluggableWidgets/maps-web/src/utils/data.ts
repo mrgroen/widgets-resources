@@ -28,17 +28,17 @@ function fromDatasource(marker: DynamicMarkersType, item: ObjectItem): ModeledMa
     let latitude;
     let longitude;
     if (locationType === "address") {
-        address = addr ? addr.get(item).value : undefined;
+        address = addr ? addr(item).value : undefined;
     } else {
-        latitude = lat ? Number(lat.get(item).value) : undefined;
-        longitude = lng ? Number(lng.get(item).value) : undefined;
+        latitude = lat ? Number(lat(item).value) : undefined;
+        longitude = lng ? Number(lng(item).value) : undefined;
     }
     return {
         address,
         latitude,
         longitude,
-        title: title ? title.get(item).value : "",
-        action: onClickAttribute ? onClickAttribute.get(item).execute : undefined,
+        title: title ? title(item).value : "",
+        action: onClickAttribute ? onClickAttribute(item).execute : undefined,
         customMarker: marker.customMarkerDynamic?.value?.uri
     };
 }

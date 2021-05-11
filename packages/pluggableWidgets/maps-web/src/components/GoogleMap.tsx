@@ -9,10 +9,13 @@ import {
 } from "@react-google-maps/api";
 import { Marker, SharedProps } from "../../typings/shared";
 import { getGoogleMapsMarkerClustererOptions, getGoogleMapsStyles } from "../utils/google";
+import * as TurfHelpers from "@turf/helpers";
+import standardDeviationalEllipse from "@turf/standard-deviational-ellipse";
 import { getDimensions } from "../utils/dimension";
 import { translateZoom } from "../utils/zoom";
 import { Option } from "../utils/data";
 import { Alert } from "@mendix/piw-utils-internal";
+import parse from "html-react-parser";
 
 export interface GoogleMapsProps extends SharedProps {
     mapStyles?: string;
@@ -20,14 +23,15 @@ export interface GoogleMapsProps extends SharedProps {
     mapTypeControl: boolean;
     fullscreenControl: boolean;
     rotateControl: boolean;
+    markerClustererEnabled?: boolean;
     markerClustererOptions?: string;
 }
 
 export function GoogleMap(props: GoogleMapsProps): ReactElement {
     const map = useRef<google.maps.Map>();
     const center = useRef<google.maps.LatLngLiteral>({
-        lat: 51.906688,
-        lng: 4.48837
+        /* Utrecht, NL */ lat: 52.0907374,
+        lng: 5.1214201
     });
     const [selectedMarker, setSelectedMarker] = useState<Option<Marker>>();
     const [error, setError] = useState("");
@@ -47,12 +51,14 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
         streetViewControl,
         style,
         zoomLevel,
+        markerClustererEnabled,
         markerClustererOptions
     } = props;
 
     useEffect(() => {
-        if (map.current) {
+        if (map.current && locations && locations.length > 0) {
             const bounds = new google.maps.LatLngBounds();
+            /*
             locations
                 .concat(currentLocation ? [currentLocation] : [])
                 .filter(m => !!m)
@@ -62,6 +68,35 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                         lng: marker.longitude
                     });
                 });
+            */
+            /* 05-05-2021 Marcus Groen: defining the most interesting part on the map */
+            if (locations.length == 1) {
+                bounds.extend({
+                    lat: locations[0].latitude,
+                    lng: locations[0].longitude
+                });
+            } else if (locations.length > 1) {
+                try {
+                    let sdEllipse = standardDeviationalEllipse(
+                        TurfHelpers.featureCollection(
+                            locations
+                                .filter(m => !!m)
+                                .filter(m => m.latitude !== undefined && m.longitude !== undefined)
+                                .map(m => TurfHelpers.point([m.longitude, m.latitude]))
+                        )
+                    ); /* point order: longitude, latitude */
+                    sdEllipse.geometry.coordinates.forEach(pArray => {
+                        pArray.forEach(p => {
+                            bounds.extend({
+                                lat: p[1],
+                                lng: p[0]
+                            });
+                        });
+                    });
+                } catch (err) {
+                    console.warn("standardDeviationalEllipse failed: " + err.message);
+                }
+            }
             if (bounds.isEmpty()) {
                 bounds.extend(center.current);
             }
@@ -71,7 +106,7 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                 map.current.setCenter(bounds.getCenter());
             }
         }
-    }, [map.current, locations, currentLocation, autoZoom]);
+    }, [map.current, locations, locations.length, currentLocation, autoZoom]);
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: mapsToken ?? "",
@@ -125,7 +160,7 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                                             marker={marker}
                                             selectedMarker={selectedMarker}
                                             setSelectedMarker={setSelectedMarker}
-                                            clusterer={clusterer}
+                                            clusterer={markerClustererEnabled ? clusterer : null}
                                         />
                                     ))
                             }
@@ -158,7 +193,7 @@ function GoogleMapsMarker({
                 lat: marker.latitude,
                 lng: marker.longitude
             }}
-            title={marker.title}
+            title={marker.title ? marker.title.replace(/<\/?[^>]+(>|$)/g, "") : ""}
             clickable={!!marker.title || !!marker.onClick}
             onLoad={ref => {
                 markerRef.current = ref;
@@ -173,8 +208,8 @@ function GoogleMapsMarker({
                     anchor={markerRef.current}
                     onCloseClick={() => setSelectedMarker(prev => (prev === marker ? undefined : prev))}
                 >
-                    <span style={{ cursor: marker.onClick ? "pointer" : "none" }} onClick={marker.onClick}>
-                        {marker.title}
+                    <span style={{ cursor: marker.onClick ? "pointer" : "default" }} onClick={marker.onClick}>
+                        {parse(marker.title ? marker.title : "")}
                     </span>
                 </InfoWindow>
             )}

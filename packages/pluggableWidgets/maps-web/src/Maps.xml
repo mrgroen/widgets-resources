@@ -235,11 +235,15 @@
                     <description/>
                     <enumerationValues>
                         <enumerationValue key="automatic">Automatic</enumerationValue>
-                        <enumerationValue key="world">World</enumerationValue>
-                        <enumerationValue key="continent">Continent</enumerationValue>
-                        <enumerationValue key="city">City</enumerationValue>
-                        <enumerationValue key="street">Street</enumerationValue>
-                        <enumerationValue key="buildings">Buildings</enumerationValue>
+                        <enumerationValue key="world">1 (World)</enumerationValue>
+                        <enumerationValue key="continent">5 (Continent)</enumerationValue>
+                        <enumerationValue key="zoomlevel6">6</enumerationValue>
+                        <enumerationValue key="zoomlevel7">7</enumerationValue>
+                        <enumerationValue key="zoomlevel8">8</enumerationValue>
+                        <enumerationValue key="zoomlevel9">9</enumerationValue>
+                        <enumerationValue key="city">10 (City)</enumerationValue>
+                        <enumerationValue key="street">15 (Street)</enumerationValue>
+                        <enumerationValue key="buildings">20 (Buildings)</enumerationValue>
                     </enumerationValues>
                 </property>
             </propertyGroup>
