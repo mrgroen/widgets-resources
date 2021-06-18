@@ -38,6 +38,13 @@ export interface DynamicMarkersType {
     customMarkerDynamic?: DynamicValue<WebImage>;
 }
 
+export interface DynamicHeatmapsType {
+    heatmapDS?: ListValue;
+    latitude?: ListAttributeValue<Big>;
+    longitude?: ListAttributeValue<Big>;
+    heatmapOptions: string;
+}
+
 export type WidthUnitEnum = "percentage" | "pixels";
 
 export type HeightUnitEnum = "percentageOfWidth" | "pixels" | "percentageOfParent";
@@ -69,6 +76,13 @@ export interface DynamicMarkersPreviewType {
     customMarkerDynamic: string;
 }
 
+export interface DynamicHeatmapsPreviewType {
+    heatmapDS: {} | null;
+    latitude: string;
+    longitude: string;
+    heatmapOptions: string;
+}
+
 export interface MapsContainerProps {
     name: string;
     class: string;
@@ -77,6 +91,7 @@ export interface MapsContainerProps {
     advanced: boolean;
     markers: MarkersType[];
     dynamicMarkers: DynamicMarkersType[];
+    dynamicHeatmaps: DynamicHeatmapsType[];
     apiKey: string;
     apiKeyExp?: DynamicValue<string>;
     geodecodeApiKey: string;
@@ -107,6 +122,7 @@ export interface MapsPreviewProps {
     advanced: boolean;
     markers: MarkersPreviewType[];
     dynamicMarkers: DynamicMarkersPreviewType[];
+    dynamicHeatmaps: DynamicHeatmapsPreviewType[];
     apiKey: string;
     apiKeyExp: string;
     geodecodeApiKey: string;

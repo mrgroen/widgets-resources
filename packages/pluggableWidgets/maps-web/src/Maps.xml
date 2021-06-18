@@ -142,6 +142,42 @@
                     </properties>
                 </property>
             </propertyGroup>
+            <propertyGroup caption="Heatmaps">
+                <property key="dynamicHeatmaps" type="object" isList="true" required="false">
+                    <caption>Heatmap list</caption>
+                    <description>A list of dynamic heatmap locations on the map.</description>
+                    <properties>
+                        <propertyGroup caption="Locations">
+                            <propertyGroup caption="Location">
+                                <property key="heatmapDS" type="datasource" isList="true" required="false">
+                                    <caption>Data source</caption>
+                                    <description/>
+                                </property>
+                                <property key="latitude" type="attribute" dataSource="heatmapDS" required="false">
+                                    <caption>Latitude</caption>
+                                    <description>Decimal number from -90.0 to 90.0.</description>
+                                    <attributeTypes>
+                                        <attributeType name="Decimal"/>
+                                    </attributeTypes>
+                                </property>
+                                <property key="longitude" type="attribute" dataSource="heatmapDS" required="false">
+                                    <caption>Longitude</caption>
+                                    <description>Decimal number from -180.0 to 180.0.</description>
+                                    <attributeTypes>
+                                        <attributeType name="Decimal"/>
+                                    </attributeTypes>
+                                </property>
+                            </propertyGroup>
+                            <propertyGroup caption="Visualization">
+                                <property key="heatmapOptions" type="string" multiline="true" required="false">
+                                    <caption>Heatmap options</caption>
+                                    <description>JSON object with HeatmapLayerOptions. https://developers.google.com/maps/documentation/javascript/reference/visualization#HeatmapLayerOptions</description>
+                                </property>
+                            </propertyGroup>
+                        </propertyGroup>
+                    </properties>
+                </property>
+            </propertyGroup>
             <propertyGroup caption="Configurations">
                 <property key="apiKey" type="string" required="false">
                     <caption>API Key</caption>

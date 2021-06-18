@@ -3,19 +3,24 @@ import classNames from "classnames";
 import {
     GoogleMap as GoogleMapComponent,
     MarkerClusterer,
+    HeatmapLayer,
     Marker as MarkerComponent,
     InfoWindow,
     useLoadScript
 } from "@react-google-maps/api";
+import { Libraries } from "@react-google-maps/api/dist/utils/make-load-script-url";
 import { Marker, SharedProps } from "../../typings/shared";
-import { getGoogleMapsMarkerClustererOptions, getGoogleMapsStyles } from "../utils/google";
-import * as TurfHelpers from "@turf/helpers";
-import standardDeviationalEllipse from "@turf/standard-deviational-ellipse";
+import { getGoogleMapsMarkerClustererOptions, getGoogleMapsStyles, useHeatmapResolver } from "../utils/google";
 import { getDimensions } from "../utils/dimension";
-import { translateZoom } from "../utils/zoom";
+/*import { translateZoom } from "../utils/zoom";*/
 import { Option } from "../utils/data";
 import { Alert } from "@mendix/piw-utils-internal";
 import parse from "html-react-parser";
+import { DynamicHeatmapsType } from "../../typings/MapsProps";
+
+class GoogleMapsStatics {
+    static libraries: Libraries = ["visualization"];
+}
 
 export interface GoogleMapsProps extends SharedProps {
     mapStyles?: string;
@@ -25,12 +30,14 @@ export interface GoogleMapsProps extends SharedProps {
     rotateControl: boolean;
     markerClustererEnabled?: boolean;
     markerClustererOptions?: string;
+    dynamicHeatmaps: DynamicHeatmapsType[];
 }
 
 export function GoogleMap(props: GoogleMapsProps): ReactElement {
     const map = useRef<google.maps.Map>();
     const center = useRef<google.maps.LatLngLiteral>({
-        /* Utrecht, NL */ lat: 52.0907374,
+        /* Utrecht, NL */
+        lat: 52.0907374,
         lng: 5.1214201
     });
     const [selectedMarker, setSelectedMarker] = useState<Option<Marker>>();
@@ -54,9 +61,10 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
         markerClustererEnabled,
         markerClustererOptions
     } = props;
+    const [heatmaps] = props.dynamicHeatmaps ? useHeatmapResolver(props.dynamicHeatmaps) : [];
 
     useEffect(() => {
-        if (map.current && locations && locations.length > 0) {
+        if (map.current && locations) {
             const bounds = new google.maps.LatLngBounds();
             /*
             locations
@@ -69,33 +77,11 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                     });
                 });
             */
-            /* 05-05-2021 Marcus Groen: defining the most interesting part on the map */
-            if (locations.length == 1) {
+            if (locations.length > 0) {
                 bounds.extend({
                     lat: locations[0].latitude,
                     lng: locations[0].longitude
                 });
-            } else if (locations.length > 1) {
-                try {
-                    let sdEllipse = standardDeviationalEllipse(
-                        TurfHelpers.featureCollection(
-                            locations
-                                .filter(m => !!m)
-                                .filter(m => m.latitude !== undefined && m.longitude !== undefined)
-                                .map(m => TurfHelpers.point([m.longitude, m.latitude]))
-                        )
-                    ); /* point order: longitude, latitude */
-                    sdEllipse.geometry.coordinates.forEach(pArray => {
-                        pArray.forEach(p => {
-                            bounds.extend({
-                                lat: p[1],
-                                lng: p[0]
-                            });
-                        });
-                    });
-                } catch (err) {
-                    console.warn("standardDeviationalEllipse failed: " + err.message);
-                }
             }
             if (bounds.isEmpty()) {
                 bounds.extend(center.current);
@@ -104,13 +90,15 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                 map.current.fitBounds(bounds);
             } else {
                 map.current.setCenter(bounds.getCenter());
+                map.current.setZoom(zoomLevel);
             }
         }
-    }, [map.current, locations, locations.length, currentLocation, autoZoom]);
+    }, [map.current, locations, currentLocation, autoZoom]);
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: mapsToken ?? "",
-        id: "_com.mendix.widget.custom.Maps.Maps"
+        id: "_com.mendix.widget.custom.Maps.Maps",
+        libraries: GoogleMapsStatics.libraries
     });
 
     if (loadError) {
@@ -144,7 +132,7 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                                 center.current = map.current.getCenter().toJSON();
                             }
                         }}
-                        zoom={autoZoom ? translateZoom("city") : zoomLevel}
+                        /*zoom={autoZoom ? translateZoom("city") : zoomLevel}*/
                         center={center.current}
                     >
                         <MarkerClusterer /* https://react-google-maps-api-docs.netlify.app/#markerclusterer */
@@ -165,6 +153,11 @@ export function GoogleMap(props: GoogleMapsProps): ReactElement {
                                     ))
                             }
                         </MarkerClusterer>
+                        {heatmaps
+                            ? heatmaps
+                                  .filter(h => !!h)
+                                  .map(heatmap => <HeatmapLayer data={heatmap.data} options={heatmap.options} />)
+                            : null}
                     </GoogleMapComponent>
                 ) : (
                     <div className="spinner" />
@@ -193,7 +186,6 @@ function GoogleMapsMarker({
                 lat: marker.latitude,
                 lng: marker.longitude
             }}
-            title={marker.title ? marker.title.replace(/<\/?[^>]+(>|$)/g, "") : ""}
             clickable={!!marker.title || !!marker.onClick}
             onLoad={ref => {
                 markerRef.current = ref;
@@ -208,9 +200,9 @@ function GoogleMapsMarker({
                     anchor={markerRef.current}
                     onCloseClick={() => setSelectedMarker(prev => (prev === marker ? undefined : prev))}
                 >
-                    <span style={{ cursor: marker.onClick ? "pointer" : "default" }} onClick={marker.onClick}>
+                    <div style={{ cursor: marker.onClick ? "pointer" : "default" }} onClick={marker.onClick}>
                         {parse(marker.title ? marker.title : "")}
-                    </span>
+                    </div>
                 </InfoWindow>
             )}
         </MarkerComponent>

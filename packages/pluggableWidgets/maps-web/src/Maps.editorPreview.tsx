@@ -47,6 +47,7 @@ export const preview = (props: MapsPreviewProps): ReactNode => {
                 width={Number(props.width)}
                 widthUnit={props.widthUnit}
                 zoomLevel={props.zoom === "automatic" ? translateZoom("street") : translateZoom(props.zoom)}
+                dynamicHeatmaps={[]}
             />
         </Fragment>
     );

@@ -54,6 +54,7 @@ export default function Maps(props: MapsContainerProps): ReactNode {
             zoomLevel={translateZoom(props.zoom)}
             markerClustererEnabled={props.markerClustererEnabled}
             markerClustererOptions={props.markerClustererOptions}
+            dynamicHeatmaps={props.dynamicHeatmaps}
         />
     );
 }
