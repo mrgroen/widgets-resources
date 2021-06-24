@@ -153,18 +153,12 @@
                                     <caption>Data source</caption>
                                     <description/>
                                 </property>
-                                <property key="latitude" type="attribute" dataSource="heatmapDS" required="false">
-                                    <caption>Latitude</caption>
-                                    <description>Decimal number from -90.0 to 90.0.</description>
+                                <property key="heatmapDataFile" type="attribute" dataSource="heatmapDS" required="false">
+                                    <caption>Data file</caption>
+                                    <description>Provide geographic data in the form of an array or an MVCArray[] object. The data may be either a LatLng object or a WeightedLocation object. https://developers.google.com/maps/documentation/javascript/heatmaplayer</description>
                                     <attributeTypes>
-                                        <attributeType name="Decimal"/>
-                                    </attributeTypes>
-                                </property>
-                                <property key="longitude" type="attribute" dataSource="heatmapDS" required="false">
-                                    <caption>Longitude</caption>
-                                    <description>Decimal number from -180.0 to 180.0.</description>
-                                    <attributeTypes>
-                                        <attributeType name="Decimal"/>
+                                        <attributeType name="String"/>
+                                        <attributeType name="Binary"/>
                                     </attributeTypes>
                                 </property>
                             </propertyGroup>

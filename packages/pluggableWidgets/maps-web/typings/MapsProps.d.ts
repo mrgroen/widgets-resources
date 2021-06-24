@@ -40,8 +40,7 @@ export interface DynamicMarkersType {
 
 export interface DynamicHeatmapsType {
     heatmapDS?: ListValue;
-    latitude?: ListAttributeValue<Big>;
-    longitude?: ListAttributeValue<Big>;
+    heatmapDataFile?: ListAttributeValue<string | any>;
     heatmapOptions: string;
 }
 
@@ -78,8 +77,7 @@ export interface DynamicMarkersPreviewType {
 
 export interface DynamicHeatmapsPreviewType {
     heatmapDS: {} | null;
-    latitude: string;
-    longitude: string;
+    heatmapDataFile: string;
     heatmapOptions: string;
 }
 

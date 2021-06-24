@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from "react";
-import { ObjectItem, ValueStatus } from "mendix";
+import { ValueStatus } from "mendix";
 import deepEqual from "deep-equal";
 import { ClustererOptions, ClusterIconStyle } from "@react-google-maps/marker-clusterer";
 import { DynamicHeatmapsType } from "../../typings/MapsProps";
@@ -50,7 +50,10 @@ export function getGoogleMapsMarkerClustererOptions(options?: string): Clusterer
 }
 
 export interface Heatmap {
-    data: google.maps.LatLng[];
+    data:
+        | google.maps.MVCArray<google.maps.LatLng | google.maps.visualization.WeightedLocation>
+        | google.maps.LatLng[]
+        | google.maps.visualization.WeightedLocation[];
     options?: google.maps.visualization.HeatmapLayerOptions;
 }
 
@@ -102,22 +105,20 @@ async function filterHeatmaps(locations?: Heatmap[]): Promise<Heatmap[]> {
 
 function convertDynamicHeatmap(heatmap: DynamicHeatmapsType): Heatmap | undefined {
     if (heatmap.heatmapDS && heatmap.heatmapDS.status === ValueStatus.Available) {
-        let { latitude: lat, longitude: lng } = heatmap;
-        if (lat != undefined && lng != undefined) {
-            let locations = heatmap.heatmapDS.items?.map(item => fromDatasource(heatmap, item)) ?? [];
+        let { heatmapDataFile: file } = heatmap;
+        if (file != undefined) {
+            let locations =
+                heatmap.heatmapDS.items?.map(item => {
+                    let myEval = eval;
+                    let str = file ? String(file(item).value) : "";
+                    return myEval(str);
+                }) ?? [];
             return {
-                data: locations,
+                data: locations.flat(),
                 options: getGoogleMapsHeatmapOptions(heatmap.heatmapOptions)
             };
         }
     }
-}
-
-function fromDatasource(heatmap: DynamicHeatmapsType, item: ObjectItem): google.maps.LatLng {
-    const { latitude: lat, longitude: lng } = heatmap;
-    let latitude = lat ? Number(lat(item).value) : 0; //undefined is already handled, so should never be zero
-    let longitude = lng ? Number(lng(item).value) : 0; //undefined is already handled, so should never be zero
-    return new google.maps.LatLng({ lat: latitude, lng: longitude });
 }
 
 function getGoogleMapsHeatmapOptions(options?: string): google.maps.visualization.HeatmapLayerOptions | undefined {
